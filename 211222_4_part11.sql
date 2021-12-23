@@ -62,4 +62,37 @@ SELECT * FROM TT2;
 --<INDEX> --검색 빠르게 하려고
 DROP INDEX INX_EMP_NM;
 
-CREATE INDEX IDX_EMP_NM ON EMP(ENAME);
+CREATE INDEX IDX_EMP_NM ON EMP(ENAME); -- 단일인덱스
+
+CREATE INDEX IDX_EMP_NM_JOB
+    ON EMP (ENAME, JOB);  --복합인덱스 **순서 중요하다.
+
+SELECT * FROM EMP
+WHERE ENAME = 'ALLEN' AND JOB='ASLESMAN';
+
+
+--인덱스와 속도
+--HIREDATE에 인덱스를 추가했다고 하자.
+
+SELECT *
+FROM EMP
+WHERE HIREDATE BETWEEN '1980-01-01' AND '1980-12-31'; --빠르다. 인덱스 덕분
+
+SELECT *
+FROM EMP
+WHERE TO_CHAR(HIREDATE, 'YYYY') = '1980' ; --느리다. 조건절에서 원본데이터에 가하면 INDEX안 먹음
+
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '%LL%'; --느리다. LIKE의 경우 인덱스를 타지 않는다.
+
+--잦은 변경이나 삭제가 있는 테이블에는 인덱스 많이 생성하면 지연...
+
+
+--(HIREDATE에 인덱스 쓴 경우) INLINE VIEW를 쓰면 INDEX 영향 안 받나?
+--그래도 받는다.
+SELECT *
+FROM (SELECT *
+        FROM EMP
+        WHERE DEPTNO=10)
+WHERE HIREDATE BETWEEN '1980-01-01' AND '1980-12-31';
