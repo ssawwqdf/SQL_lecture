@@ -38,6 +38,13 @@ ORDER BY U.USER_ID
 
 --내코드
 --왜 CG에 안 되는지 이해 못 했다.
+--company를 다 보여줘라 company goods에 없어도. 그래서 cg에 (+)
+--그러면 cg랑 g 연결해야되는데 cg의 널값이랑 연결되는 g가 있을까? 없다.
+--그래도 보여줘야하니까 g에 (+) 해주는 것!!!!
+--가운데 cg 가리면 궁극적으로는 a에서 c(+)로 가는 것.
+--문식님 질문: 근데 seq는 pk인데 null 들어가도 되나?
+
+
 SELECT C.COM_SEQ, C.COM_NAME, G.GOOD_SEQ, G.GOOD_NAME
 FROM COMPANY C, COMPANY_GOODS CG, GOODS G
 WHERE C.COM_SEQ=CG.COM_SEQ(+)
